@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         fontFamily: 'Quicksand',
-        errorColor: Colors.pink,
+        errorColor: Colors.red,
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
                 fontFamily: 'OpenSans',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple,
+                color: Colors.black,
               ),
               button: TextStyle(color: Colors.white),
             ),
