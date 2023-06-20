@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_hui/models/transaction.dart';
 import 'package:intl/intl.dart';
+import 'package:tracker_hui/widgets/chart_bar.dart';
 
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
@@ -22,20 +23,49 @@ class Chart extends StatelessWidget {
           totalSum += recentTransactions[i].amount!;
         }
       }
-      print(DateFormat.E(weekDay));
+      print(DateFormat.E().format(weekDay));
       print(totalSum);
       return {
-        'day': DateFormat.E(weekDay),
+        'day': DateFormat.E().format(weekDay),
         'amount': totalSum,
       };
+    }).reversed.toList();
+  }
+
+  double get totalSpending {
+    return groupedTransactionValues.fold(0.0, (sum, item) {
+      return sum + ((item['amount']) as double);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(groupedTransactionValues);
     return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0), // Set the border radius
+      ),
+      color: Theme.of(context).primaryColorLight,
+      elevation: 10,
+      margin: EdgeInsets.all(15),
+      child: Container(
+        padding: EdgeInsets.all(15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactionValues.map((data) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                (data['day']) as String,
+                (data['amount']) as double,
+                totalSpending == 0.00
+                    ? 0.00
+                    : ((data['amount']) as double) / totalSpending,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }
