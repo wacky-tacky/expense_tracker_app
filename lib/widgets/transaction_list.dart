@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 
@@ -10,67 +11,67 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      child: transactions.isEmpty
-          ? Column(
+    return transactions.isEmpty
+        ? LayoutBuilder(builder: (ctx, Constraints) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'NO TRANSACTIONS ADDED YET',
+                  'No transactions added yet. :(',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Container(
-                  height: 200,
+                  height: Constraints.maxHeight * 0.6,
                   child: Image.asset('assets/images/waiting.png',
                       fit: BoxFit.cover),
                 ),
               ],
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(20.0), // Set the border radius
-                  ),
-                  color: Theme.of(context).primaryColorLight,
-                  margin: EdgeInsets.all(15),
-                  elevation: 20,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColorDark,
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: FittedBox(
-                          child: Text(
-                            '\$${transactions[index].amount}',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+            );
+          })
+        : ListView.builder(
+            itemBuilder: (ctx, index) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(20.0), // Set the border radius
+                ),
+                color: Theme.of(context).primaryColorLight,
+                margin: EdgeInsets.all(15),
+                elevation: 20,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColorDark,
+                    radius: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: FittedBox(
+                        child: Text(
+                          '\$${transactions[index].amount}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    title: Text(
-                      (transactions[index].title) as String,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format((transactions[index].date)!),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => deleteTx(transactions[index].id),
-                      color: Theme.of(context).errorColor,
-                    ),
                   ),
-                );
-              },
-              itemCount: transactions.length,
-            ),
-    );
+                  title: Text(
+                    (transactions[index].title) as String,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  subtitle: Text(
+                    DateFormat.yMMMd().format((transactions[index].date)!),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => deleteTx(transactions[index].id),
+                    color: Theme.of(context).errorColor,
+                  ),
+                ),
+              );
+            },
+            itemCount: transactions.length,
+          );
   }
 }
 // return Card(
